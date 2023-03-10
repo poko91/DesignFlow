@@ -5,18 +5,23 @@ module.exports = {
     updateUser: async (req, res) => {
         // Validate incoming data
         if (!validateUser(req.body)) {
-            console.log("Invalid data")
+            console.log(validateUser.errors)
             return res.status(400).send({ message: "Invalid data" })
         }
         try {
             const { studio_name, business_add } = req.body
             const { user_id } = req.params
             const result = await updateUser(studio_name,business_add,user_id)
+            if (result.length == 0) {
+                console.log("User not found")
+                return res.status(401).send({ message: "User not found" })
+            }
             if (result.affectedRows > 0) {
                 console.log("Updated successfully")
                 res.status(200).send({ message: "Updated successfully" })  
             } else {
-                console.log("No rows updated")
+                console.log("User not found")
+                res.status(400).send({ message: "User not found" })  
             }
         } catch (error) {
             console.log("Internal Server error")

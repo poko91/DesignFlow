@@ -5,6 +5,7 @@ const validatePassword = require('../../apiSchema/passwordSchema')
 module.exports = {
     editPassword: async (req, res) => {
         if (!validatePassword(req.body)) {
+            console.log(validatePassword.errors)
             return res.status(400).send({ message: "Invalid data" })
         }
         try {
