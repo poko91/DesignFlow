@@ -7,6 +7,7 @@ module.exports = {
   loginUser: async (req, res, next) => {
     // Validate incoming data
     if (!validateLogin(req.body)) {
+      console.log(validateLogin.errors)
       return res.status(400).send({ message: "Invalid data" })
     }
     try {
