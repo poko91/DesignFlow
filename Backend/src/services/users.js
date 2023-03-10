@@ -11,10 +11,10 @@ module.exports = {
         }
     },
 
-    updateUser: async (email, studio_name, business_add, user_id)=> {
+    updateUser: async (studio_name, business_add, user_id)=> {
         try {
-            const [rows] = await pool.query("UPDATE users SET email = ?, studio_name = ?, business_add =? WHERE user_id = ?",
-            [email, studio_name, business_add, user_id])
+            const [rows] = await pool.query("UPDATE users SET studio_name = ?, business_add =? WHERE user_id = ?",
+            [studio_name, business_add, user_id])
             return rows
         } catch (error) {
             console.log(error)
