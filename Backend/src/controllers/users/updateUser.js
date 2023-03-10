@@ -6,17 +6,12 @@ module.exports = {
         // Validate incoming data
         if (!validateUser(req.body)) {
             console.log("Invalid data")
-            return res.status(400).send()
+            return res.status(400).send({ message: "Invalid data" })
         }
         try {
-            const { email, studio_name, business_add } = req.body
+            const { studio_name, business_add } = req.body
             const { user_id } = req.params
-            const result = await updateUser(
-                email,
-                studio_name,
-                business_add,
-                user_id
-            )
+            const result = await updateUser(studio_name,business_add,user_id)
             if (result.affectedRows > 0) {
                 console.log("Updated successfully")
                 res.status(200).send({ message: "Updated successfully" })  
@@ -25,7 +20,7 @@ module.exports = {
             }
         } catch (error) {
             console.log("Internal Server error")
-            res.status(500).send()
+            res.status(500).send({ message: "Internal Server error" })
         }
     }
 }

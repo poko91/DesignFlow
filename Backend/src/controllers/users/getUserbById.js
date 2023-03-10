@@ -3,8 +3,8 @@ const { getUserById } = require('../../services/users')
 module.exports = {
   getUserById: async (req, res) => {
     try {
-      const id = req.params.user_id
-      const user = await getUserById(id)
+      const { user_id } = req.params
+      const user = await getUserById(user_id)
       const loggedInUser = {
         user_id: user.user_id,
         email: user.email,
@@ -16,7 +16,7 @@ module.exports = {
     }
     catch (error) {
       console.log(error)
-      res.status(500).send()
+      res.status(500).send({ message: "Internal Server Error "})
     }
 }
 };
