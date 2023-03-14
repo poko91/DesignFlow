@@ -3,16 +3,14 @@ const { getUserById } = require('../../services/users')
 module.exports = {
   getUserById: async (req, res) => {
     try {
-      const { user_id } = req.params
+      const user_id = req.payload.aud
+      console.log(req.payload)
       const user = await getUserById(user_id)
-      const loggedInUser = {
-        user_id: user.user_id,
-        email: user.email,
-        studio_name: user.studio_name,
-        business_add: user.business_add
-      };
-      console.log('user:', loggedInUser)
-      res.status(200).send(loggedInUser)
+      if (user.length == 0){
+        console.log("User not found")
+        return res.status(400).send({ message: "User not found" })
+      }
+      res.status(200).send(user[0])
     }
     catch (error) {
       console.log(error)

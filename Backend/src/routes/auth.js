@@ -8,6 +8,6 @@ const { logout } = require('../controllers/auth/logout')
 router.post('/login', loginUser)
 router.post('/register', registerUser)
 router.post('/refresh-token', refreshToken)
-router.delete('/logout', logout)
+router.post('/logout', logout)
 
 module.exports = router

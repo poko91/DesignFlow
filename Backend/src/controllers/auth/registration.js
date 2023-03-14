@@ -15,7 +15,7 @@ module.exports = {
 
       // Check if user already exists
       const user = await userExists(email)
-      if (user.length) {
+      if (user.length != 0) {
         console.log("User already exists")
         return res.status(409).send({ message: "User already exists" })
       }

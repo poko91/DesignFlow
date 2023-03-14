@@ -1,4 +1,4 @@
-const { updateUser} = require("../../services/users")
+const { updateUser, getUserById } = require("../../services/users")
 const validateUser = require("../../apiSchema/userSchema")
 
 module.exports = {
@@ -10,12 +10,13 @@ module.exports = {
         }
         try {
             const { studio_name, business_add } = req.body
-            const { user_id } = req.params
-            const result = await updateUser(studio_name,business_add,user_id)
-            if (result.length == 0) {
+            const user_id = req.payload.aud
+            const user = await getUserById(user_id)
+            if (user.length == 0){
                 console.log("User not found")
-                return res.status(401).send({ message: "User not found" })
+                return res.status(400).send({ message: "User not found" })
             }
+            const result = await updateUser(studio_name,business_add,user_id)
             if (result.affectedRows > 0) {
                 console.log("Updated successfully")
                 res.status(200).send({ message: "Updated successfully" })  

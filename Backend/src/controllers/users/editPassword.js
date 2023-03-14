@@ -1,4 +1,4 @@
-const { editPassword, getPassword } = require('../../services/users')
+const { editPassword, getPassword, getUserById } = require('../../services/users')
 const bcrypt = require('bcrypt')
 const validatePassword = require('../../apiSchema/passwordSchema')
 
@@ -10,11 +10,20 @@ module.exports = {
         }
         try {
             const { old_password, password } = req.body
-            const { user_id } = req.params
+            const user_id = req.payload.aud
+            const check_user = await getUserById(user_id)
+            if (check_user.length == 0){
+                console.log("User not found")
+                return res.status(400).send({ message: "User not found" })
+            }
             // Find user by email
             const user = await getPassword(user_id)
             // Verify password
-            const isValidPassword = await bcrypt.compare(old_password, user.password)
+            if (user.length == 0 ){
+                console.log("User not found")
+                return res.status(400).send({ message: "User not found" })
+            }
+            const isValidPassword = await bcrypt.compare(old_password, user[0].password)
             if (!isValidPassword) {
                 console.log("Old password is not valid")
                 return res.status(401).send({ message: "Old password is not valid" })

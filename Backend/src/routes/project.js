@@ -6,10 +6,10 @@ const { getProjectById } = require('../controllers/projects/getProjectById')
 const { updateProject } = require('../controllers/projects/updateProject')
 const { deleteProject } = require('../controllers/projects/deleteProject')
 
-router.post('/:user_id/projects', createProject)
-router.get('/:user_id/projects', getProjects)
-router.get('/:user_id/projects/:project_id', getProjectById)
-router.put('/:user_id/projects/:project_id', updateProject)
-router.delete('/:user_id/projects/:project_id', deleteProject)
+router.post('/projects', createProject)
+router.get('/projects', getProjects)
+router.get('/projects/:project_id', getProjectById)
+router.put('/projects/:project_id', updateProject)
+router.post('/projects/:project_id', deleteProject)
 
 module.exports = router 

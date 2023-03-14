@@ -14,9 +14,9 @@ module.exports = {
         const { email, password } = req.body
         // Find user by email
         const user = await userExists(email)
-        if (!user.length) {
-          console.log("User does not exist")
-          return res.status(401).send({ message: "User does not exist" })
+        if (user.length == 0) {
+          console.log("User not found")
+          return res.status(401).send({ message: "User not found" })
         }   
         // Verify password
         const isValidPassword = await bcrypt.compare(password, user[0].password)

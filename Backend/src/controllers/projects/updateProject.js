@@ -1,4 +1,4 @@
-const { updateProject } = require('../../services/projects')
+const { updateProject, check_user } = require('../../services/projects')
 const validateSchema = require('../../apiSchema/updateProjectSchema')
 
 module.exports = {
@@ -13,7 +13,8 @@ module.exports = {
                 start_date, end_date, budget,
                 denomination } = req.body
 
-            const { user_id, project_id } = req.params
+            const user_id = req.payload.aud
+            const { project_id } = req.params
 
             const project = await updateProject(project_name, project_type,
                 project_status, project_add,

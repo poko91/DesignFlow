@@ -38,5 +38,9 @@ const PORT = process.env.APP_PORT;
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
-
+// Shutdown server
+process.on('SIGINT', function() {
+  console.log( "\nGracefully shutting down" );
+  process.exit(0);
+});
 
