@@ -17,7 +17,6 @@ app.use('/users',verifyAccessToken, users_router)
 app.use('/users',verifyAccessToken, projects_router)
 app.use('/users',verifyAccessToken, tasks_router)
 
-
 // handle errors
 app.use(async (req,res,next)=> {
   next(createError.NotFound())
@@ -35,7 +34,7 @@ app.use((err,req,res,next)=> {
 
 // Start server
 const PORT = process.env.APP_PORT;
-app.listen(PORT, () => {
+module.exports = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 // Shutdown server
@@ -43,4 +42,3 @@ process.on('SIGINT', function() {
   console.log( "\nGracefully shutting down" );
   process.exit(0);
 });
-
