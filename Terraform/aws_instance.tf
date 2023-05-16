@@ -1,7 +1,7 @@
 // launch aws rds mysql instance
 resource "aws_db_instance" "designflow_rds_instance" {
   allocated_storage      = 20
-  storage_type           = "gp3"
+  storage_type           = "gp2"
   engine                 = "mysql"
   engine_version         = "8.0.32"
   instance_class         = var.db_instance_type
