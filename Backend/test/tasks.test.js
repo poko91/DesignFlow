@@ -33,7 +33,7 @@ describe('Tasks Endpoint Test', function () {
   it('should be able to get task by id', function (done) {
     chai
       .request(app)
-      .get('/users/tasks/4')
+      .get('/users/tasks/1')
       .set('Authorization', `Bearer ${access_token}`)
       .end(function (err, res) {
         expect(res).to.have.status(200);
@@ -46,7 +46,7 @@ describe('Tasks Endpoint Test', function () {
       .request(app)
       .get('/users/tasks/project')
       .set('Authorization', `Bearer ${access_token}`)
-      .send({project_name: "Test Project"})
+      .send({project_id: 1})
       .end(function (err, res) {
         expect(res).to.have.status(200);
         done();
@@ -68,13 +68,13 @@ describe('Tasks Endpoint Test', function () {
   it('should be able to update project', function (done) {
     chai
       .request(app)
-      .put('/users/tasks/4')
+      .put('/users/tasks/1')
       .set('Authorization', `Bearer ${access_token}`)
       .send({task_title: "Test task",
       task_description: "Test",
       due_date: "2023-01-01",
       priority: "Medium",
-      project_name: "Test Project"})
+      project_id: 1})
       .end(function (err, res) {
         expect(res).to.have.status(200);
         done();

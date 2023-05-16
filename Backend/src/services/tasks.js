@@ -2,11 +2,11 @@ const pool = require('../config/database')
 
 module.exports = {
     createTask: async (task_title, priority, task_description,
-        due_date, project_name, user_id )=> {
+        due_date, project_id, user_id )=> {
         try {
             const [rows] = await pool.query(`INSERT INTO tasks (task_title, priority, task_description, 
-                due_date, project_name, user_id ) VALUES (?, ?, ?, ?, ?, ?)`,
-            [task_title, priority, task_description, due_date, project_name, user_id])
+                due_date, project_id, user_id ) VALUES (?, ?, ?, ?, ?, ?)`,
+            [task_title, priority, task_description, due_date, project_id, user_id])
             return rows
         } catch (error) {
             console.log(error)
@@ -14,13 +14,13 @@ module.exports = {
     },
 
     updateTask: async (task_title, priority, task_description,
-        due_date, project_name, task_id)=> {
+        due_date, project_id, task_id)=> {
         try {
             const [rows] = await pool.query(`UPDATE tasks SET task_title=?,
-            priority=?, task_description=?, due_date =?, project_name=?
+            priority=?, task_description=?, due_date =?, project_id=?
             WHERE deleted = 0 AND task_id = ?`,
             [task_title, priority, task_description,
-            due_date, project_name, task_id])
+            due_date, project_id, task_id])
             return rows
         } catch (error) {
             console.log(error)
@@ -38,9 +38,9 @@ module.exports = {
         }
     },
     
-    getProjectTasks: async (project_name)=> {
+    getProjectTasks: async (project_id)=> {
         try {
-            const [rows] = await pool.query(`SELECT * FROM task_details WHERE project_name = ?`, [project_name])
+            const [rows] = await pool.query(`SELECT * FROM task_details WHERE project_id = ?`, [project_id])
             return rows
         } catch (error) {
             console.log(error)
@@ -82,7 +82,7 @@ module.exports = {
     deleteAllTasks : async (project_id)=> {
         try {
             const [rows] = await pool.query(`UPDATE tasks SET tasks.deleted = 1
-            WHERE project_name IN (SELECT project_name FROM projects WHERE user_id = ?)`,
+            WHERE project_id IN (SELECT project_id FROM projects WHERE user_id = ?)`,
             [project_id])
             return rows
         } catch (error) {

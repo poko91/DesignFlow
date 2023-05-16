@@ -9,7 +9,7 @@ module.exports = {
           }
         try {
             const { task_title, priority, task_description,
-                due_date, project_name } = req.body
+                due_date, project_id } = req.body
             const { task_id } = req.params
 
             if (!req.body.task_title) {
@@ -17,7 +17,7 @@ module.exports = {
                   message: "Task title can not be empty!",
                 });
                 return;
-              } else if (!req.body.project_name) {
+              } else if (!req.body.project_id) {
                 res.status(400).send({
                   message: "Project name can not be empty!",
                 });
@@ -25,7 +25,7 @@ module.exports = {
               } 
 
             const task = await updateTask(task_title, priority, task_description,
-                due_date, project_name, task_id)
+                due_date, project_id, task_id)
 
             if (task.length == 0) {
                 console.log("Task not found")
