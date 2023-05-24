@@ -1,11 +1,32 @@
 sudo: required
+language: generic
 services:
-- docker
-before_install:
-- openssl aes-256-cbc -K $encrypted_0930996c5c07_key -iv $encrypted_0930996c5c07_iv
-  -in .env.enc -out Backend/.env -d
-- docker build -t poko91/designflow:$(git rev-parse HEAD) -f Backend/Dockerfile Backend
-script:
-- docker run --rm -p 3000:3000 -e CI=true -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-  -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY poko91/designflow:$(git rev-parse
-  HEAD) npm test
+  - docker
+stages:
+  - test
+  - deploy
+jobs:
+  include:
+  - stage: test
+    before_install:
+    - openssl aes-256-cbc -K $encrypted_0930996c5c07_key -iv $encrypted_0930996c5c07_iv
+      -in .env.enc -out Backend/.env -d
+    - docker build -t poko91/designflow:$(git rev-parse HEAD) -f Backend/Dockerfile
+      Backend
+    script:
+    - docker run --rm -p 3000:3000 -e CI=true -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+      -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY poko91/designflow:$(git rev-parse
+      HEAD) npm test
+  - stage: deploy
+    before_install:
+      - openssl aes-256-cbc -K $encrypted_0930996c5c07_key -iv $encrypted_0930996c5c07_iv
+        -in .env.enc -out Backend/.env -d
+      - openssl aes-256-cbc -K $encrypted_cb5fa03c17d9_key -iv $encrypted_cb5fa03c17d9_iv -in designflow.pem.enc -out designflow.pem -d
+      - eval "$(ssh-agent -s)"
+      - chmod 600 designflow.pem
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    script:
+      - docker build -t poko91/designflow:$(git rev-parse HEAD) -f Backend/Dockerfile Backend
+      - docker push poko91/designflow:$(git rev-parse HEAD)
+      - docker logout
+      - ssh -o StrictHostKeyChecking=no -i designflow.pem $AWS_USERNAME@43.207.180.89 "bash scripts/docker_container.sh $(git rev-parse HEAD)"
