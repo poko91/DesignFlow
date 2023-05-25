@@ -14,7 +14,7 @@ module.exports = {
         priority,
         task_description,
         due_date,
-        project_id,
+        project_name,
       } = req.body;
 
       if (!req.body.task_title) {
@@ -22,9 +22,9 @@ module.exports = {
           message: "Task title can not be empty!",
         });
         return;
-      } else if (!req.body.project_id) {
+      } else if (!req.body.project_name) {
         res.status(400).send({
-          message: "Project id can not be empty!",
+          message: "Project name can not be empty!",
         });
         return;
       } 
@@ -34,8 +34,8 @@ module.exports = {
         priority,
         task_description,
         due_date,
-        project_id,
-        user_id
+        user_id,
+        project_name,
       );
 
       if (result.affectedRows > 0) {

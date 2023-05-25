@@ -1,12 +1,26 @@
 const pool = require('../config/database')
 
 module.exports = {
+    // createTask: async (task_title, priority, task_description,
+    //     due_date, project_id, user_id )=> {
+    //     try {
+    //         const [rows] = await pool.query(`INSERT INTO tasks (task_title, priority, task_description, 
+    //             due_date, project_id, user_id ) VALUES (?, ?, ?, ?, ?, ?)`,
+    //         [task_title, priority, task_description, due_date, project_id, user_id])
+    //         return rows
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // },
+
     createTask: async (task_title, priority, task_description,
-        due_date, project_id, user_id )=> {
+        due_date, project_id, user_id, project_name )=> {
         try {
-            const [rows] = await pool.query(`INSERT INTO tasks (task_title, priority, task_description, 
-                due_date, project_id, user_id ) VALUES (?, ?, ?, ?, ?, ?)`,
-            [task_title, priority, task_description, due_date, project_id, user_id])
+            const [rows] = await pool.query(`INSERT INTO tasks (task_title, priority, task_description, due_date, project_id, user_id)
+            SELECT ?, ?, ?, ?, project_id, ?
+            FROM projects
+            WHERE project_name = ?;`,
+            [task_title, priority, task_description, due_date, project_id, user_id, project_name])
             return rows
         } catch (error) {
             console.log(error)
