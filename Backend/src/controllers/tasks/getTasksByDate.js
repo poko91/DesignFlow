@@ -6,7 +6,6 @@ module.exports = {
             const user_id = req.payload.aud
             const { due_date } = req.body
             const tasks = await getTasksByDate(due_date, user_id)
-            console.log(due_date)
             if (tasks.length == 0) {
                 console.log("Tasks not found");
                 return res.status(404).send({ message: "Tasks not found" });

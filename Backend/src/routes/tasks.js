@@ -15,7 +15,6 @@ router.get('/tasks/:task_id', getTaskById)
 router.put('/tasks/:task_id', updateTask)
 router.post('/tasks/:task_id', deleteTask)
 router.get('/tasks', getAllUserTasks)
-router.get('/tasksByDate', getTasksByDate)
-
+router.post('/tasksByDate', getTasksByDate)
 
 module.exports = router 

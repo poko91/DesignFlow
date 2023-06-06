@@ -56,7 +56,7 @@ describe('Tasks Endpoint Test', function () {
   it('should be able to get task by due date', function (done) {
     chai
       .request(app)
-      .get('/users/tasksByDate')
+      .post('/users/tasksByDate')
       .set('Authorization', `Bearer ${access_token}`)
       .send({due_date: "2023-01-01"})
       .end(function (err, res) {
