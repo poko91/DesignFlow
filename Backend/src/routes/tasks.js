@@ -10,7 +10,7 @@ const { getTasksByDate } = require('../controllers/tasks/getTasksByDate')
 
 
 router.post('/tasks', createTask)
-router.get('/tasks/project', getProjectTasks)
+router.get('/projects/:project_id/tasks', getProjectTasks)
 router.get('/tasks/:task_id', getTaskById)
 router.put('/tasks/:task_id', updateTask)
 router.post('/tasks/:task_id', deleteTask)

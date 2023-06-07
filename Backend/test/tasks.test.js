@@ -41,10 +41,10 @@ describe('Tasks Endpoint Test', function () {
       });
   });
 
-  it('should be able to get task by project name', function (done) {
+  it('should be able to get tasks by project name', function (done) {
     chai
       .request(app)
-      .get('/users/tasks/project')
+      .get('/users/projects/1/tasks')
       .set('Authorization', `Bearer ${access_token}`)
       .send({project_id: 1})
       .end(function (err, res) {

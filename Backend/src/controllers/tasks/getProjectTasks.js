@@ -3,7 +3,7 @@ const { getProjectTasks } = require('../../services/tasks')
 module.exports = {
     getProjectTasks: async (req, res)=> {
         try {
-            const project_id = req.body.project_id
+            const project_id = req.params.project_id
             const tasks = await getProjectTasks(project_id)
             if (tasks.length == 0){
                 console.log("No tasks found")
