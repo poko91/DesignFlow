@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "designflow-mysql.cnlmkyealjw0.ap-northeast-1.rds.amazonaws.com",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "designflow_sql_server",
+            "database": "designflow",
+            "username": "poko91",
+            "askForPassword": true
+        }
+    ]
+}
