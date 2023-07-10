@@ -10,6 +10,7 @@ import 'package:flutter_application/views/components/snackbar_helper.dart';
 import 'package:flutter_application/views/components/text_gestureDectector.dart';
 import 'package:flutter_application/views/components/text_tagline2.dart';
 import 'package:flutter_application/views/pages/tasks/tasks_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -69,21 +70,23 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
     if (response.statusCode == 200) {
       // Hiding the CircularProgressIndicator.
-      if (context.mounted) Navigator.of(context).pop();
+      Get.back();
       () => Get.to(() => const TasksPage());
-      if (context.mounted)
+      if (context.mounted) {
         showSnackBar(context, message: 'Task created succeffully!');
+      }
     } else if (response.statusCode == 400) {
       // Hiding the CircularProgressIndicator.
-      if (context.mounted) Navigator.of(context).pop();
+      () => Get.back();
       if (context.mounted) showSnackBar(context, message: resBody["message"]);
       () => Get.back();
     } else {
       // Hiding the CircularProgressIndicator.
-      if (context.mounted) Navigator.of(context).pop();
-      if (context.mounted)
+      () => Get.back();
+      if (context.mounted) {
         showSnackBar(context,
             message: 'An error occurred. Please try again later.');
+      }
       () => Get.back();
     }
   }
@@ -91,161 +94,163 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 80),
-      child: Column(
-        children: [
-          // Add Task
-          Row(
+        body: SafeArea(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+        child: SingleChildScrollView(
+          child: Column(
             children: [
-              IconButton(
-                onPressed: () => Get.back(),
-                icon: const Icon(Icons.arrow_back_ios, size: 20),
+              // Add Task
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () => Get.back(),
+                    icon: Icon(Icons.arrow_back_ios, size: 20.w),
+                  ),
+                  const TitleText(title: "Add Task"),
+                  const Spacer(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30.w),
+                    child: GestureDetectorText(
+                        title: 'Done',
+                        onTap: () {
+                          if (titleController.text.isNotEmpty ||
+                              descController.text.isNotEmpty) {
+                            createTask();
+                          } else {
+                            showSnackBar(context,
+                                message: "All fields must be filled");
+                          }
+                        }),
+                  )
+                ],
               ),
-              const TitleText(title: "Add Task"),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: GestureDetectorText(
-                    title: 'Done',
-                    onTap: () {
-                      if (titleController.text.isNotEmpty || descController.text.isNotEmpty) {
-                        createTask();
-                      } else {
-                        showSnackBar(context, message: "All fields must be filled");
-                      }
-                    }),
-              )
+              SizedBox(height: 30.h),
+              // Title
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // title
+                  TaglineText2(tagline: 'Title'),
+                  SizedBox(height: 5.h),
+                  MyTextField(
+                    controller: titleController,
+                    hintText: 'Enter Task Title',
+                    obscureText: false,
+                  ),
+                  SizedBox(height: 25.h),
+                  // task description
+                  TaglineText2(tagline: 'Description'),
+                  SizedBox(height: 5.h),
+                  MyTextField(
+                    controller: descController,
+                    hintText: 'Enter Task Description',
+                    obscureText: false,
+                  ),
+                  SizedBox(height: 25.h),
+                  // Due date
+                  TaglineText2(tagline: 'Due Date'),
+                  SizedBox(height: 5.h),
+                  DateTextField(
+                    controller: dateController,
+                    hintText: DateFormat.yMMMMd().format(_selectedDate),
+                    onPressed: () {
+                      getDateFromUser();
+                    },
+                  ),
+                  SizedBox(height: 25.h),
+                  // priority
+                  TaglineText2(tagline: 'Priority'),
+                  SizedBox(height: 5.h),
+                  Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.indigo.shade200,
+                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      child: DropdownButton(
+                        value: _selectPriority,
+                        isExpanded: true,
+                        items: _priorityList
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectPriority = newValue!;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.indigo.shade400,
+                        ),
+                        iconSize: 25.w,
+                        style: TextStyle(fontSize: 16.sp, color: Colors.indigo),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 25.h),
+                  // Project name
+                  TaglineText2(tagline: 'Project name'),
+                  SizedBox(height: 5.h),
+                  FutureBuilder<List<Project>>(
+                      future: _future,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        }
+
+                        if (snapshot.data == null) {
+                          return const CircularProgressIndicator();
+                        }
+
+                        return Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.indigo.shade200,
+                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(5)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: DropdownButton<Project>(
+                              isExpanded: true,
+                              onChanged: (project) =>
+                                  setState(() => _selectedProject = project),
+                              value: _selectedProject,
+                              items: [
+                                ...snapshot.data!.map(
+                                  (project) => DropdownMenuItem(
+                                    value: project,
+                                    child: Text(project.projectName),
+                                  ),
+                                ),
+                              ],
+                              icon: Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.indigo.shade400,
+                              ),
+                              iconSize: 25,
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.indigo),
+                            ),
+                          ),
+                        );
+                      }),
+                ],
+              ),
             ],
           ),
-          const SizedBox(height: 30),
-          // Title
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // title
-                TaglineText2(tagline: 'Title'),
-                const SizedBox(height: 5),
-                MyTextField(
-                  controller: titleController,
-                  hintText: 'Enter Task Title',
-                  obscureText: false,
-                ),
-                const SizedBox(height: 25),
-                // task description
-                TaglineText2(tagline: 'Description'),
-                const SizedBox(height: 5),
-                MyTextField(
-                  controller: descController,
-                  hintText: 'Enter Task Description',
-                  obscureText: false,
-                ),
-                const SizedBox(height: 25),
-                // Due date
-                TaglineText2(tagline: 'Due Date'),
-                const SizedBox(height: 5),
-                DateTextField(
-                  controller: dateController,
-                  hintText: DateFormat.yMMMMd().format(_selectedDate),
-                  onPressed: () {
-                    getDateFromUser();
-                  },
-                ),
-                const SizedBox(height: 25),
-                // priority
-                TaglineText2(tagline: 'Priority'),
-                const SizedBox(height: 5),
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.indigo.shade200,
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: DropdownButton(
-                      value: _selectPriority,
-                      isExpanded: true,
-                      items: _priorityList
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectPriority = newValue!;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.indigo.shade400,
-                      ),
-                      iconSize: 25,
-                      style:
-                          const TextStyle(fontSize: 16, color: Colors.indigo),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 25),
-                // Project name
-                TaglineText2(tagline: 'Project name'),
-                const SizedBox(height: 5),
-                FutureBuilder<List<Project>>(
-                    future: _future,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      }
-
-                      if (snapshot.data == null) {
-                        return const CircularProgressIndicator();
-                      }
-
-                      return Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.indigo.shade200,
-                          ),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: DropdownButton<Project>(
-                            isExpanded: true,
-                            onChanged: (project) =>
-                                setState(() => _selectedProject = project),
-                            value: _selectedProject,
-                            items: [
-                              ...snapshot.data!.map(
-                                (project) => DropdownMenuItem(
-                                  value: project,
-                                  child: Text(project.projectName),
-                                ),
-                              ),
-                            ],
-                            icon: Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Colors.indigo.shade400,
-                            ),
-                            iconSize: 25,
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.indigo),
-                          ),
-                        ),
-                      );
-                    }),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     ));
   }

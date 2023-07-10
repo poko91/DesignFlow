@@ -121,9 +121,9 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                   ),
                   const SizedBox(height: 50),
                   // Project due date
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
+                    children: [
                       TitleText2(title: "Project Tasks"),
                     ],
                   ),

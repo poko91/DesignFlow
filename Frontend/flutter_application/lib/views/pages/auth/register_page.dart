@@ -9,6 +9,8 @@ import 'package:flutter_application/views/components/text_tagline.dart';
 import 'package:flutter_application/views/components/text_title.dart';
 import 'package:flutter_application/views/pages/auth/login_page.dart';
 import 'package:flutter_application/views/pages/profile/dashboard_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -58,11 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
       prefs.setString('refresh_token', refreshToken);
 
       // Navigate to HomePage
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const Dashboard()),
-      );
+      Get.to(() => const Dashboard());
     } else if (response.statusCode == 400) {
       // Hiding the CircularProgressIndicator.
        if (context.mounted) Navigator.of(context).pop();
@@ -74,8 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
       // Show snackbar
       if (context.mounted) showSnackBar(context, message: 'User already exists');
     } else {
-      if (!mounted) return;
-      Navigator.of(context).pop();
+      Get.back();
       // Show snackbar
       if (context.mounted) showSnackBar(context, message: 'An error occurred. Please try again later.');
     }
@@ -85,68 +82,71 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.teal[50],
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 100),
-          child: Column(
-            children: [
-              // Welcome
-              const TitleText(title: 'Register'),
-              const SizedBox(height: 25),
-              // Studio name textfield
-              MyTextField(
-                controller: studioNameController,
-                hintText: 'Studio name',
-                obscureText: false,
-              ),
-              const SizedBox(height: 10),
-              // Email address textfield
-              MyTextField(
-                controller: emailController,
-                hintText: 'Email address',
-                obscureText: false,
-              ),
-              const SizedBox(height: 10),
-              // Password textfield
-              MyTextField(
-                controller: passwordController,
-                hintText: 'Password',
-                obscureText: true,
-              ),
-              const SizedBox(height: 80),
-              // login button
-              MyButton(
-                name: 'Register',
-                onTap: () {
-                  register();
-                },
-              ),
-              const SizedBox(height: 20),
-              // google button
-              MyButton(
-                name: "Sign up with Google",
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const RegisterPage()));
-                },
-              ),
-              const SizedBox(height: 80),
-              // Already have an account? Sign in
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.h),
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  TaglineText(tagline: 'Already have an account?'),
-                  const SizedBox(width: 20),
-                  GestureDetectorText(
-                    title: 'Sign in',
+                  // Welcome
+                  const TitleText(title: 'Register'),
+                  SizedBox(height: 25.h),
+                  // Studio name textfield
+                  MyTextField(
+                    controller: studioNameController,
+                    hintText: 'Studio name',
+                    obscureText: false,
+                  ),
+                  SizedBox(height: 10.h),
+                  // Email address textfield
+                  MyTextField(
+                    controller: emailController,
+                    hintText: 'Email address',
+                    obscureText: false,
+                  ),
+                  SizedBox(height: 10.h),
+                  // Password textfield
+                  MyTextField(
+                    controller: passwordController,
+                    hintText: 'Password',
+                    obscureText: true,
+                  ),
+                  SizedBox(height: 50.h),
+                  // login button
+                  MyButton(
+                    name: 'Register',
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const LoginPage()));
+                      register();
                     },
                   ),
+                  SizedBox(height: 10.h),
+                  // google button
+                  MyButton(
+                    name: "Sign up with Google",
+                    onTap: () {
+                      
+                    }
+                  ),
+                  SizedBox(height: 50.h),
+                  // Already have an account? Sign in
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TaglineText(tagline: 'Already have an account?'),
+                      SizedBox(width: 20.w),
+                      GestureDetectorText(
+                        title: 'Sign in',
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => const LoginPage()));
+                        },
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
         ),
       ),

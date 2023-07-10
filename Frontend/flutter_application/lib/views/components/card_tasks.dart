@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TasksCard extends StatelessWidget {
   final String taskTitle;
@@ -18,10 +19,10 @@ class TasksCard extends StatelessWidget {
     return Card(
       shadowColor: Colors.grey.withOpacity(0.1),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
       ),
       child: Container(
-        height: 125,
+        height: 100.h,
         width: screenWidth,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),

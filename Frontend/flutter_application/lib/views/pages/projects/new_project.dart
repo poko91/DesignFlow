@@ -56,21 +56,28 @@ class _AddProjectPageState extends State<AddProjectPage> {
     var resBody = json.decode(response.body);
 
     if (response.statusCode == 200) {
-    // Hiding the CircularProgressIndicator.
-    Get.back();
-    showSnackBar(context, message: 'Project created successfully!');
-    // Fetch the updated list of projects
-    projectController.getProjects();
-    Get.back();
-  } else if (response.statusCode == 400) {
-    // Hiding the CircularProgressIndicator.
-    Get.back();
-    showSnackBar(context, message: resBody["message"]);
-  } else {
-    // Hiding the CircularProgressIndicator.
-    Get.back();
-    showSnackBar(context, message: 'An error occurred. Please try again later.');
-  }
+      // Hiding the CircularProgressIndicator.
+      Get.back();
+      if (context.mounted) {
+        showSnackBar(context, message: 'Project created successfully!');
+      }
+      // Fetch the updated list of projects
+      projectController.getProjects();
+      Get.back();
+    } else if (response.statusCode == 400) {
+      // Hiding the CircularProgressIndicator.
+      Get.back();
+      if (context.mounted){
+      showSnackBar(context, message: resBody["message"]);
+      }
+    } else {
+      // Hiding the CircularProgressIndicator.
+      Get.back();
+      if (context.mounted){
+      showSnackBar(context,
+          message: 'An error occurred. Please try again later.');
+      }
+    }
   }
 
   @override
@@ -94,10 +101,12 @@ class _AddProjectPageState extends State<AddProjectPage> {
                 child: GestureDetectorText(
                     title: 'Done',
                     onTap: () {
-                      if (nameController.text.isNotEmpty || addController.text.isNotEmpty) {
+                      if (nameController.text.isNotEmpty ||
+                          addController.text.isNotEmpty) {
                         createProject();
                       } else {
-                        showSnackBar(context, message: "All fields must be filled");
+                        showSnackBar(context,
+                            message: "All fields must be filled");
                       }
                     }),
               )
@@ -236,7 +245,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
         dueDate = DateFormat('yyyy-MM-dd').format(_selectedDate);
       });
     } else {
+      if (context.mounted){
       showSnackBar(context, message: 'Error occurred while picking date');
+      }
     }
   }
 }
