@@ -1,13 +1,15 @@
 
 # DesignFlow
 
-DesigFlow is a Flutter App to help Architect and Interiors Designers to manage their projects and track daily project tasks. 
-
-Backend - Developed in Node.js using Express.js framework.
-Frontend - Developed in Flutter
+DesigFlow is a Flutter App to help Architect and Interiors Designers to manage their projects and track daily project tasks. The backend Server is developed using Node.js and deployed on AWS EC2 instance.
 
 
-https://github.com/poko91/DesignFlow/assets/82212882/862c8ad5-66eb-4ac8-9bfd-9cce855b2071
+
+
+
+https://github.com/poko91/DesignFlow/assets/82212882/ec54ab3e-7464-4e16-8814-29d794f1ba13
+
+
 
 
 
