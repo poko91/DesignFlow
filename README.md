@@ -7,7 +7,8 @@ DesigFlow is a Flutter App to help Architect and Interiors Designers to manage t
 
 
 
-https://github.com/poko91/DesignFlow/assets/82212882/ec54ab3e-7464-4e16-8814-29d794f1ba13
+https://github.com/poko91/DesignFlow/assets/82212882/77c1456e-5eb3-46d5-aae5-e680d3e7a6e5
+
 
 
 
